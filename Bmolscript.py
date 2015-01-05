@@ -1,15 +1,11 @@
-def sequentie_setter():
-  seqlijst = []
-  sequentie = raw_input("Vul hier een sequentie in: ")
-  for letter in sequentie:
-    seqlijst.append(letter)
-  print seqlijst
-  return seqlijst 
-def positie_pakker():
-  beginpos = 1
-  eindpos = 100
+def positie_pakker(pp_sequentie):
+  beginpos = 4
+  eindpos = 10
+  return pp_sequentie[(beginpos-1):eindpos]
+  
   
 def main():
-    seqlijst = sequentie_setter()
-    positie_pakker(seqlijst)
+    sequentie ="AAGCTCGTGATGTACTAGTACGTACTAT"
+    print len(sequentie)
+    print positie_pakker(seqlijst)
 main()
