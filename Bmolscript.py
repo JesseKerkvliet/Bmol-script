@@ -10,7 +10,7 @@ def positie_pakker(pp_sequentie):
   eindpos = 10
   return pp_sequentie[(beginpos-1):eindpos]
   
-def nucleotide_teller(sequentie):
+def nucleotide_teller(primer):
   A_lijst = []
   T_lijst = []
   C_lijst = []
