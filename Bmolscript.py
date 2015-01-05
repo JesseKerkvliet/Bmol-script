@@ -10,6 +10,28 @@ def positie_pakker(pp_sequentie):
   eindpos = 10
   return pp_sequentie[(beginpos-1):eindpos]
   
+def nucleotide_teller(sequentie):
+  A_lijst = []
+  T_lijst = []
+  C_lijst = []
+  G_lijst = []
+  for x in sequentie:
+    if x == "A":
+      x.append(A_lijst)
+    elif x == "T":
+      x.append(T_lijst)
+    elif x == "C":
+      x.append(C_lijst)
+    elif x == "G":
+      x.append(G_lijst)
+    return (A_lijst, C_lijst, G_lijst, T_lijst)
+    
+def tm_berekenen():
+  Tm = 2*(len(A_lijst) + len(T_lijst)) + 4*(len(C_lijst) + len(G_lijst))
+  return Tm
+  
+def GC-content():
+  
   
 def main():
     sequentie ="AAGCTCGTGATGTACTAGTACGTACTAT"
