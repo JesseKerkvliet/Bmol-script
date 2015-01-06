@@ -8,6 +8,7 @@ import wx
 
 from KnoppenPaneel import KnoppenPaneel
 from SubPaneel import SubPaneel
+from SequentieInvoer import SequentieInvoer
 
 class InvoerScherm(wx.Frame):
     def __init__(self, parent, id=wx.ID_ANY, title='Shreck is dreck',
@@ -19,4 +20,16 @@ class InvoerScherm(wx.Frame):
         super(InvoerScherm, self).__init__(parent, id, title, pos, size,
                                            style, name)
         self.MainPaneel = SubPaneel(self)
+        self.Vbox = wx.BoxSizer(wx.VERTICAL)
+        self.Knoppen = KnoppenPaneel(self, vraag=True)
+        self.seq = SequentieInvoer(self)
+        self.Vbox.Add(self.seq, 1, wx.ALL | wx.EXPAND)
+        self.Vbox.Add(self.Knoppen, 1, wx.ALL | wx.EXPAND)
+        self.SetSizer(self.Vbox)
         self.Show()
+
+    def GetDoorgaan(self):
+        return self.Knoppen.GetDoorgaan()
+
+    def GetHelp(self):
+        return self.Knoppen.GetHelp()

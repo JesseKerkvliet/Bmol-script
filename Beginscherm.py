@@ -26,7 +26,7 @@ class BeginScherm(wx.Frame):
         self.MainPaneel = SubPaneel(self)
         Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Text = TekstPaneel(self.MainPaneel, TekstTy=1)
-        self.Knop = KnoppenPaneel(self.MainPaneel, vraag=True)
+        self.Knop = KnoppenPaneel(self.MainPaneel)
         Vbox.Add(self.Text, 4, wx.ALL | wx.EXPAND)
         Vbox.Add(self.Knop, 1, wx.ALL | wx.EXPAND)
         self.MainPaneel.SetSizer(Vbox)
