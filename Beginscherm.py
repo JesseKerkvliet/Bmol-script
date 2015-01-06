@@ -27,14 +27,17 @@ class BeginScherm(wx.Frame):
         Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Text = TekstPaneel(self.MainPaneel, TekstTy=1)
         self.Knop = KnoppenPaneel(self.MainPaneel, vraag=True)
-        Vbox.Add(self.Text, 1, wx.ALL | wx.EXPAND)
-        Vbox.Add(self.Knop, 4, wx.ALL | wx.EXPAND)
+        Vbox.Add(self.Text, 4, wx.ALL | wx.EXPAND)
+        Vbox.Add(self.Knop, 1, wx.ALL | wx.EXPAND)
         self.MainPaneel.SetSizer(Vbox)
         self.Show()
     
         
     def GetDoorgaan(self):
         return self.Knop.GetDoorgaan()
+
+    def GetHelp(self):
+        return self.Knop.GetHelp()
     
 if __name__ == "__main__":
     app = wx.App(False)

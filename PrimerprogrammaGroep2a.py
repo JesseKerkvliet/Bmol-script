@@ -1,3 +1,4 @@
+# -*- coding: cp1252 -*-
 """
 Sebastiaan de Vriend 06-01-2015 Controller maken.
 
@@ -25,7 +26,9 @@ class PrimerProg(wx.App):
         EventID = event.GetId()
         print EventID
         if EventID == self.frame.GetDoorgaan():
-            print 'doorgaan'
+            self.SluitScherm()
+        if EventID == self.frame.GetHelp():
+            print 'mail daniël'
 
     def SluitScherm(self):
         self.frame.Destroy()
