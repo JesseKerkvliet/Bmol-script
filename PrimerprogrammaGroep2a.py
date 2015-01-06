@@ -9,12 +9,13 @@ Ook koppelt het programma alles aan elkaar.
 import wx
 
 from Beginscherm import BeginScherm
+from InvoerScherm import InvoerScherm
 
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
         self.SchermCounter =0
-        self.SchermLijst = [BeginScherm]
+        self.SchermLijst = [BeginScherm, InvoerScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
         return True
