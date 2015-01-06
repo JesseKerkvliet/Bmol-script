@@ -15,7 +15,7 @@ class BeginScherm(wx.Frame):
     welkoms boodschap. Meer informatie staat in de init documentatie.
     """
     def __init__(self, parent, id=wx.ID_ANY, title='Primer_programma',
-                 pos=wx.DefaultPosition, size=(300,500),
+                 pos=wx.DefaultPosition, size=(700,700),
                  style=wx.DEFAULT_FRAME_STYLE &~(wx.RESIZE_BORDER |
                                                   wx.CLOSE_BOX |
                                                   wx.SYSTEM_MENU),
@@ -24,7 +24,8 @@ class BeginScherm(wx.Frame):
                                            style, name)
         self.MainPaneel = SubPaneel(self)
         Vbox = wx.BoxSizer(wx.VERTICAL)
-        self.Text = TekstPaneel(self, TekstTy=1)
+        self.Text = TekstPaneel(self.MainPaneel, TekstTy=1)
+        Vbox.Add(self.Text, 1, wx.ALL | wx.EXPAND)
         self.MainPaneel.SetSizer(Vbox)
         self.Show()
     
