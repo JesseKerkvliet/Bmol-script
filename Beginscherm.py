@@ -8,6 +8,7 @@ import wx
 
 from SubPaneel import SubPaneel
 from TekstPaneel import TekstPaneel
+from KnoppenPaneel import KnoppenPaneel
 
 class BeginScherm(wx.Frame):
     """
@@ -25,12 +26,15 @@ class BeginScherm(wx.Frame):
         self.MainPaneel = SubPaneel(self)
         Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Text = TekstPaneel(self.MainPaneel, TekstTy=1)
+        self.Knop = KnoppenPaneel(self.MainPaneel, vraag=True)
         Vbox.Add(self.Text, 1, wx.ALL | wx.EXPAND)
+        Vbox.Add(self.Knop, 4, wx.ALL | wx.EXPAND)
         self.MainPaneel.SetSizer(Vbox)
         self.Show()
     
         
-        
+    def GetDoorgaan(self):
+        return self.Knop.GetDoorgaan()
     
 if __name__ == "__main__":
     app = wx.App(False)
