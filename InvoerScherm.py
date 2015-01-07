@@ -23,8 +23,10 @@ class InvoerScherm(wx.Frame):
         self.MainPaneel = SubPaneel(self)
         self.Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Knoppen = KnoppenPaneel(self, vraag=True)
+        self.Knoppen.SetDoorgaanAanUit(True)
         self.seq = SequentieInvoer(self)
         self.Bind(wx.EVT_BUTTON, self.Openen, self.seq.GetBladeren())
+        self.Bind(wx.EVT_TEXT, self.HandelBox, self.seq.GetTinvoer())
         self.Vbox.Add(self.seq, 1, wx.ALL | wx.EXPAND)
         self.Vbox.Add(self.Knoppen, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(self.Vbox)
@@ -35,7 +37,9 @@ class InvoerScherm(wx.Frame):
 
     def GetHelp(self):
         return self.Knoppen.GetHelp()
-
+    def HandelBox(self, event):
+        print 'handolbox'
+        self.Knoppen.SetDoorgaanAanUit(False)
 
     def Openen(self, event):
         print 'bladeren'

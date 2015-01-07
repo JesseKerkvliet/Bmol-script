@@ -29,7 +29,11 @@ class SequentieInvoer(wx.Panel):
         self.VBox.Add(self.invoer, 1, wx.ALL | wx.EXPAND)
         self.VBox.Add(self.HBox, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(self.VBox)
+
     def GetBladeren(self):
         return self.bknop
+
+    def GetTinvoer(self):
+        return self.invoer
         
     

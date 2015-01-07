@@ -67,7 +67,10 @@ class KnoppenPaneel(wx.Panel):
         return self.Help.GetId()
 
     def SetDoorgaanAanUit(self, status):
-        self.Doorgaan.Disable(status)
+        if status:
+            self.Doorgaan.Disable()
+        else:
+            self.Doorgaan.Enable()
     
         
         
