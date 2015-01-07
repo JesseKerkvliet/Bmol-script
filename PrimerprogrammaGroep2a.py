@@ -19,7 +19,7 @@ class PrimerProg(wx.App):
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
         return True
-
+    
     def SchermBeheer(self):
         self.frame = self.SchermLijst[self.SchermCounter](None)
 
@@ -27,9 +27,12 @@ class PrimerProg(wx.App):
         EventID = event.GetId()
         print EventID
         if EventID == self.frame.GetDoorgaan():
+            if self.SchermCounter == 1:
+                print self.frame.GetSeq()
             self.SluitScherm()
-        if EventID == self.frame.GetHelp():
+        elif EventID == self.frame.GetHelp():
             print 'open helpscherm'
+        
 
     def SluitScherm(self):
         self.frame.Destroy()
