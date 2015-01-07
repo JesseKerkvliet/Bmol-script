@@ -65,7 +65,9 @@ class KnoppenPaneel(wx.Panel):
     def GetHelp(self):
         """Functie returnt de ID van de Help knop."""
         return self.Help.GetId()
-    
+
+    def SetDoorgaanAanUit(self, status):
+        self.Doorgaan.Disable(status)
     
         
         

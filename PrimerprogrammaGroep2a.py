@@ -29,12 +29,14 @@ class PrimerProg(wx.App):
         if EventID == self.frame.GetDoorgaan():
             self.SluitScherm()
         if EventID == self.frame.GetHelp():
-            print 'mail daniël'
+            print 'open helpscherm'
 
     def SluitScherm(self):
         self.frame.Destroy()
         self.SchermCounter += 1
         self.SchermBeheer()
+
+    
 
 app = PrimerProg(False)
 app.MainLoop()
