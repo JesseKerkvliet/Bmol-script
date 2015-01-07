@@ -1,7 +1,7 @@
 """
 Sebastiaan de Vriend 05-01-2015 Begin maken met beginscherm.
 
-Programma toon beginscherm voor primerprogramma.
+Programma toon beginscherm voor primerprogramma. bla
 """
 
 import wx
