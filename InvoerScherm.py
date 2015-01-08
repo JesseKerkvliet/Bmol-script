@@ -1,11 +1,12 @@
 """
 Sebastiaan de Vriend 06-01-2015 Invoer scherm maken.
 
-Script toont invoer scherm met diverse opties en mogelijkheden.
+Script toont invoer scherm met diverse opties en mogelijkheden.              
 """
-
-import wx
 import os
+import wx
+
+
 
 from KnoppenPaneel import KnoppenPaneel
 from SubPaneel import SubPaneel
@@ -35,6 +36,7 @@ class InvoerScherm(wx.Frame):
         self.Show()
 
     def GetDoorgaan(self):
+        """De functie roept self.Knoppen.GetDoorgaan an en retruend."""
         return self.Knoppen.GetDoorgaan()
 
     def GetSeq(self):
@@ -52,8 +54,7 @@ class InvoerScherm(wx.Frame):
 
     def Openen(self, event):
         print 'bladeren'
-        wildcard = """Fasta(*.fa)|*.fa|
-Alle bestanden (*.*)|*.*""" 
+        wildcard = """Fasta(*.fa)|*.fa|""" 
         self.blad = wx.FileDialog(self, "woop", os.getcwd(), "",
                                   wildcard, wx.OPEN)
         if self.blad.ShowModal() == wx.ID_OK:

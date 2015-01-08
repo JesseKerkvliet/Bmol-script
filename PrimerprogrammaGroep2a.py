@@ -8,6 +8,8 @@ Ook koppelt het programma alles aan elkaar.
 
 import wx
 
+
+
 from Beginscherm import BeginScherm
 from InvoerScherm import InvoerScherm
 

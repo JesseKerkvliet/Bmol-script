@@ -5,7 +5,7 @@ Script zorgt voor sequentie van gebruikert.
 """
 
 import wx
-
+import wx.lib.intctrl
 
 from SubPaneel import SubPaneel
 
@@ -87,9 +87,9 @@ class SequentieInvoer(wx.Panel):
         for lijst in self.OptieLijst:
             hbox = wx.BoxSizer(wx.HORIZONTAL)
             text = wx.StaticText(self, id=-1, label=lijst['Text'])
-            Lveld = wx.TextCtrl(self, id=lijst['idL'])
+            Lveld = wx.lib.intctrl.IntCtrl(self, id=lijst['idL'])
             streepje = wx.StaticText(self, id=-1, label='-')
-            Rveld = wx.TextCtrl(self, id=lijst['idR'])
+            Rveld = wx.lib.intctrl.IntCtrl(self, id=lijst['idR'])
             hbox.Add(text)
             hbox.Add(Lveld)
             hbox.Add(streepje)
@@ -97,9 +97,24 @@ class SequentieInvoer(wx.Panel):
             OptieBox.Add(hbox)
             self.OptieCtrl.append(Lveld)
             self.OptieCtrl.append(Rveld)
+        self.OptieBoxStatus()
         return OptieBox
-
+    def OptieBoxStatus(self):
+        """
+        De functie kijkt of de lengste van self.invoer groter is dan 0.
+        Als dit zo is, dan worden de opties aangezet door een kleine
+        for loop.
+        Als dit niet zo is, dan wordt alles uitgezet door een kleine
+        for loop.
+        """
+        if len(self.invoer.GetValue()) > 0:
+            [x.Enable() for x in self.OptieCtrl]
+        else:
+            [x.Disable() for x in self.OptieCtrl]
+    
     def CheckInvoer(self, inputID):
-        print inputID
+        self.OptieBoxStatus()
+    
+    
         
     
