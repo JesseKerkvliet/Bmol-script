@@ -29,7 +29,7 @@ class InvoerScherm(wx.Frame):
         self.Knoppen.SetDoorgaanAanUit(True)
         self.seq = SequentieInvoer(self)
         self.Bind(wx.EVT_BUTTON, self.Openen, self.seq.GetBladeren())
-        self.Bind(wx.EVT_TEXT, self.HandelBox)
+        self.seq.Bind(wx.EVT_KEY_DOWN, self.HandelBox)
         self.Vbox.Add(self.seq, 19, wx.ALL | wx.EXPAND)
         self.Vbox.Add(self.Knoppen, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(self.Vbox)
@@ -46,7 +46,9 @@ class InvoerScherm(wx.Frame):
         return self.Knoppen.GetHelp()
 
     def HandelBox(self, event):
-        eventid = event.GetId()
+        eventid = event.GetKeyCode()
+        print eventid
+        event.Skip()
         self.seq.CheckInvoer(eventid)
         self.ChecklistCheck()
             

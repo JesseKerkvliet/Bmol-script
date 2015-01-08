@@ -78,25 +78,27 @@ class SequentieInvoer(wx.Panel):
         Output: 1
             OptieBox: BoxSizer met daarin aangemaakte objecten.
         """
-        self.OptieLijst = [{'Text':'Uitgesloten Regio:', 'L':'<', 'R': '>',
-                            'idL':wx.ID_ANY,'idR': wx.ID_ANY}, 
-                           {'Text':'Primer binding regio:', 'L':'[',
-                            'R':']', 'idL':wx.ID_ANY, 'idR': wx.ID_ANY}]
+        self.OptieLijst = [{'Text':'Uitgesloten Regio <>:', 'L':'<', 'R': '>',
+                            'idL':0,'idR': 0, 'tb':0}, 
+                           {'Text':"3'-5' primer voorkeur []:", 'L':'[',
+                            'R':']', 'idL':0, 'idR': 0, 'tb':0},
+                            {'Text':"5'-3' primer voorkeur {}:", 'L':'[{',
+                            'R':'}', 'idL':0, 'idR': 0, 'tb':0}]
         self.OptieCtrl=[]
         OptieBox = wx.BoxSizer(wx.VERTICAL)
         for lijst in self.OptieLijst:
             hbox = wx.BoxSizer(wx.HORIZONTAL)
-            text = wx.StaticText(self, id=-1, label=lijst['Text'])
-            Lveld = wx.lib.intctrl.IntCtrl(self, id=lijst['idL'])
+            lijst['tb'] = wx.StaticText(self, id=-1, label=lijst['Text'])
+            lijst['idL'] = wx.lib.intctrl.IntCtrl(self, -1, name='L')
             streepje = wx.StaticText(self, id=-1, label='-')
-            Rveld = wx.lib.intctrl.IntCtrl(self, id=lijst['idR'])
-            hbox.Add(text)
-            hbox.Add(Lveld)
+            lijst['idR'] = Rveld = wx.lib.intctrl.IntCtrl(self, -1, name='R')
+            hbox.Add(lijst['tb'])
+            hbox.Add(lijst['idL'] )
             hbox.Add(streepje)
             hbox.Add(Rveld)
             OptieBox.Add(hbox)
-            self.OptieCtrl.append(Lveld)
-            self.OptieCtrl.append(Rveld)
+            self.OptieCtrl.append(lijst['idL'])
+            self.OptieCtrl.append(lijst['idR'])
         self.OptieBoxStatus()
         return OptieBox
     def OptieBoxStatus(self):
@@ -112,8 +114,77 @@ class SequentieInvoer(wx.Panel):
         else:
             [x.Disable() for x in self.OptieCtrl]
     
+    def VeranderSeg(self, pos, teken):
+        
+        if pos != 0:
+            verander = True
+        else:
+            verander = False
+        seqoud = self.GetSeq()
+        
+        
+        newseq = seqoud.replace(teken, "")
+        if verander:
+            totaal_seq = str(newseq[0:pos] + teken + newseq[pos:])
+        else:
+            totaal_seq = newseq
+        self.SetBoxVal(totaal_seq)
+    
     def CheckInvoer(self, inputID):
         self.OptieBoxStatus()
+        self.CheckOptieBoxen()
+        for l in self.OptieLijst:
+            if inputID == l['idL'].GetId():
+                self.VeranderSeg(l['idL'].GetValue(), l['L'])
+            elif inputID == l['idR'].GetId():
+                self.VeranderSeg(l['idR'].GetValue(), l['R'])
+        if inputID == self.invoer.GetId():
+            self.SeqControlle()
+    def SeqControlle(self):
+        new_seq = ""
+        tekenlijst = '<>{}[]'
+        dna = 'AaTtCcGg'
+        teller = 0
+        print 'seq_contr'
+        for teken in self.GetSeq():
+            if teken in tekenlijst:
+                tekenlijst = tekenlijst.replace(teken, "")
+                teller += 1
+                new_seq += teken
+            elif teken in dna:
+                teller += 1
+                new_seq += teken
+        
+        self.SetBoxVal(new_seq)
+        
+                
+            
+        
+    def CheckOptieBoxen(self):
+        """
+        De functie loopt de waardes na van de checkboxen en kijkt of
+        de tekentjes goed staan. Dit wordt gedaan door te kijken
+        naar de uitkomst van links - rechts. Als deze namelijk
+        hoger is dan 0, dan staan de tekens niet goed. Ook wordt
+        er gekeken of de rechterkant en de linkerkant niet de waarde 0
+        bevatten. Dan is er namelijk niks aan de hand. In de if statement
+        wordt de achtergrond veranded naar de bijbehorende kleur. Na de
+        if wordt de achtergrond van de tekst gerefreshed zodat deze
+        op het scherm van de gebruiker getoont wordt.
+        """
+        for l in self.OptieLijst:
+            if l['idL'].GetValue() - l['idR'].GetValue() >=0:
+                if l['idR'].GetValue() != 0:
+                    l['tb'].SetBackgroundColour('red')
+                else:
+                    l['tb'].SetBackgroundColour(None)
+            elif l['idL'].GetValue() - l['idR'].GetValue() <=0:
+                if l['idL'].GetValue() != 0:
+                    l['tb'].SetBackgroundColour('green')
+                else:
+                    l['tb'].SetBackgroundColour(None) 
+            l['tb'].Refresh() 
+                
     
     
         
