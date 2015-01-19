@@ -5,15 +5,28 @@ Bin2a
 '''
 from collections import Counter
 
-def positie_pakker(pp_sequentie):
+def positie_pakker(pp_sequentie,pp_richting):
   '''
-  Deze functie krijgt de volledige sequentie mee.
+  Deze functie krijgt de volledige sequentie mee, en de richting waarin
+  de primers gezocht moeten worden.
   Er worden twee waarden vastgesteld; de begin- en eind-positie.
   De functie geeft vervolgens een op de juist plaatsen geknipte
   sequentie terug
   '''
-  beginpos = 5
-  eindpos = 50
+  if pp_richting == "f":
+    beginpos = pp_sequentie.find('[')
+    eindpos = pp_sequentie.find(']')
+    if beginpos == -1:
+      beginpos = 1
+    if eindpos == -1:
+      eindpos = pp_sequentie.find('<')
+  elif pp_richting == "r":
+    beginpos = pp_sequentie.find('{')
+    eindpos = pp_sequentie.find('}')
+    if beginpos == -1:
+      beginpos = 1
+    if eindpos == -1:
+      eindpos = pp_sequentie.find('<')   
   return pp_sequentie[(beginpos-1):eindpos]
       
 def tm_check(tm_preprimerlist):
@@ -34,14 +47,8 @@ def tm_check(tm_preprimerlist):
         
         teldict = Counter(y)
         tm = 2*teldict["T"] + 2*teldict["A"] + 4*teldict["G"] + 4*teldict["C"]
-       #print y,tm
-        if tm < 55 or tm > 60:
-            primerlist.remove(y)
-
-            #print len(primerlist)
-            
-        else:
-            pass #print "PIEMEL", tm, len(primerlist)
+        if tm < 50 or tm > 60:
+            primerlist.remove(y)         
     return primerlist
 def cg_check(cg_primerlist):
     '''
@@ -58,15 +65,55 @@ def cg_check(cg_primerlist):
     primers = cg_primerlist[:]
     for i in primers:
         teldict = Counter(i)
-        #print teldict
-        
-       
         cg_content = (teldict["G"] + teldict["C"])/ float(len(i)) * 100
         if cg_content < 50.0 or cg_content > 60.0:
-            primers.remove(i)
-            #print len(primers)
-          
+            primers.remove(i)          
     return primers
+
+def primerpakken(pp_sequentie):
+    '''
+    De ingelezen sequentie wordt meegegeven.
+    Er wordt in de sequentie gezocht naar de tekens die aangeven dat het
+    gewenste product daar zit (< en >) en de posities worden opgeslagen
+    Voor ieder element in de sequentie wordt een preprimer gemaakt door
+    elke sequentie van de juiste lengte te pakken. Als de lengte 15 is,
+    en de < en > tags zitten niet in de preprimer wordt deze toegevoegd
+    aan een lijst. Er wordt gekeken of de primer op de posities binnen de
+    < en > tags zitten, als dit zo is worden ze uit de lijst verwijderd.
+    De lijst met preprimers wordt teruggegeven.
+    '''
+    preprimerlist = []
+    exclude_start = pp_sequentie.find("<")
+    exclude_stop = pp_sequentie.find(">")
+    for x in range(len(pp_sequentie)):
+        
+        preprimer = pp_sequentie[x:x+15]
+        if len(preprimer) == 15 and ">" not in preprimer and "<"not in preprimer:
+            preprimerlist.append(preprimer)
+        if "{" in preprimer or "}" in preprimer or "[" in preprimer or "]" in preprimer:
+          preprimerlist.remove(preprimer)
+        if x < exclude_stop and x > exclude_start:
+            try:
+              preprimerlist.remove(preprimer)
+            except ValueError:
+              pass
+    return preprimerlist
+
+def reverser(r_seq):
+    '''
+    De sequentie wordt meegegeven.
+    Er wordt gekeken voor ieder teken in de sequentie (in omgekeerde volgorde)
+    naar het bijbehorende teken in de complement dictionary.
+    Er wordt dan een lijst gemaakt waarin het omgekeerde complement wordt
+    opgeslagen. Dit wordt omgezet naar een string en teruggegeven.
+    '''
+    complement_dict = {'A':'T','T':'A','G':'C','C':'G', '{':'}',
+                       '}':'{', '[':']', ']':'[', '<':'>', '>':'<'}
+    complement_list = []
+    for teken in r_seq[::-1]:
+      complement_list += complement_dict[teken]
+    
+    return  ''.join(complement_list)     
 def main():
     '''
     Een bestand wordt geopend met een sequentie erin. Deze sequentie wordt
@@ -79,20 +126,15 @@ def main():
     primerlengte = 15
     sequentie = open("seq.fa","r")
     seq =  ''.join(sequentie.readlines())
-    preprimerlist = []
-    print len(seq)
-    pcrdeel = positie_pakker(seq)
-    print pcrdeel
-    for x in range(len(pcrdeel)):
-        
-        preprimer = pcrdeel[x:x+15]
-        if len(preprimer) == 15:
-            preprimerlist.append(preprimer)
-    print preprimerlist
-    primerlist = tm_check(preprimerlist)
-    print len(primerlist)
-    
-    primers = cg_check(primerlist)
-    print len(primers)
-    print primers
+    f_pcrdeel = positie_pakker(seq,'f')
+    f_preprimerlist = primerpakken(f_pcrdeel)
+    f_primerlist = tm_check(f_preprimerlist)
+    f_primers = cg_check(f_primerlist)
+    print f_primers, "na gc_check"
+    r_reversed = reverser(seq)
+    r_pcrdeel = positie_pakker(r_reversed, 'r')
+    r_preprimerlist = primerpakken(r_pcrdeel)
+    r_primerlist = tm_check(r_preprimerlist)
+    r_primers = cg_check(r_preprimerlist)
+    print r_primers, "r, na gc_check"
 main()
