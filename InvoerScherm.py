@@ -23,13 +23,15 @@ class InvoerScherm(wx.Frame):
         super(InvoerScherm, self).__init__(parent, id, title, pos, size,
                                            style, name)
         self.MainPaneel = SubPaneel(self)
-        self.checklist = {'seq': 0, 'exl':0}
+        #self.checklist = {'seq': 0, 'exl':0}
         self.Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Knoppen = KnoppenPaneel(self, vraag=True)
         self.Knoppen.SetDoorgaanAanUit(True)
         self.seq = SequentieInvoer(self)
         self.Bind(wx.EVT_BUTTON, self.Openen, self.seq.GetBladeren())
-        self.seq.Bind(wx.EVT_KEY_DOWN, self.HandelBox)
+        #self.seq.Bind(wx.EVT_CHAR_HOOK, self.HandelBox, self.seq.GetInvoer())
+        #self.Bind(wx.EVT_KEY_UP, self.HandelBox, self.seq.GetTinvoer())
+        self.Bind(wx.EVT_TEXT, self.HandelBox)
         self.Vbox.Add(self.seq, 19, wx.ALL | wx.EXPAND)
         self.Vbox.Add(self.Knoppen, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(self.Vbox)
@@ -46,17 +48,24 @@ class InvoerScherm(wx.Frame):
         return self.Knoppen.GetHelp()
 
     def HandelBox(self, event):
-        eventid = event.GetKeyCode()
-        print eventid
-        event.Skip()
+        
+        
+        eventid = event.GetId()
+        
         self.seq.CheckInvoer(eventid)
         self.ChecklistCheck()
-            
+        event.Skip()
+    def HandleOptieBox(self, event):
+        """
+        Mogelijk overbodig als de binds goed gaan.
+        """
+        print 'yolo'
+        eventid = 'swag'
         
 
     def Openen(self, event):
         print 'bladeren'
-        wildcard = """Fasta(*.fa)|*.fa|""" 
+        wildcard = """Fasta(*.fa)|*.fa""" 
         self.blad = wx.FileDialog(self, "woop", os.getcwd(), "",
                                   wildcard, wx.OPEN)
         if self.blad.ShowModal() == wx.ID_OK:
@@ -76,18 +85,25 @@ class InvoerScherm(wx.Frame):
         gebruiker alles juist heeft ingevuld. Als alles van de checklist
         goed is, dan wordt de doorgaan knop weer aangezet.
         """
+        self.checklist = {}
         uit = False
-        
-        if len(self.seq.GetSeq()) != 0:
+        seq = self.seq.GetSeq()
+        tekens = [['<','>'],['[',']'],['{','}']]
+        if len(seq) != 0:
             self.checklist['seq'] = 1
         else:
             self.checklist['seq'] = 0
-        # check voor excl
-        self.checklist['exl'] = 1
+        for tek in tekens:
+            if tek[0] in seq:
+                if tek[1] in seq.split(tek[0])[1]:
+                    self.checklist[tek[0]] = 1
+                else:
+                    self.checklist[tek[0]] = 0
+        
         for keys in self.checklist:
             if self.checklist[keys] == 1:
                 pass
             else:
                 uit = True
-        
+        print self.checklist
         self.Knoppen.SetDoorgaanAanUit(uit)

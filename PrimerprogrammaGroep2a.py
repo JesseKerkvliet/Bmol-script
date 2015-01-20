@@ -16,7 +16,7 @@ from InvoerScherm import InvoerScherm
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
-        self.SchermCounter =0
+        self.SchermCounter = 0
         self.SchermLijst = [BeginScherm, InvoerScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
