@@ -12,25 +12,30 @@ import wx
 
 from Beginscherm import BeginScherm
 from InvoerScherm import InvoerScherm
+from OptieScherm import OptieScherm
 
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
         self.SchermCounter = 0
-        self.SchermLijst = [BeginScherm, InvoerScherm]
+        self.SchermLijst = [BeginScherm, InvoerScherm, OptieScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
+        self.seq = ''
         return True
     
     def SchermBeheer(self):
-        self.frame = self.SchermLijst[self.SchermCounter](None)
+        if self.SchermCounter == 2:
+            self.frame = self.SchermLijst[self.SchermCounter](None, seq=self.seq)
+        else:
+            self.frame = self.SchermLijst[self.SchermCounter](None)
 
     def KnopBeheer(self, event):
         EventID = event.GetId()
-        print EventID
+        
         if EventID == self.frame.GetDoorgaan():
             if self.SchermCounter == 1:
-                print self.frame.GetSeq()
+                self.seq = self.frame.GetSeq()
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
             print 'open helpscherm'
