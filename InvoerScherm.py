@@ -15,7 +15,7 @@ from SequentieInvoer import SequentieInvoer
 class InvoerScherm(wx.Frame):
     def __init__(self, parent, id=wx.ID_ANY,
                  title='Primer programam - Sequentie invoeren',
-                 pos=wx.DefaultPosition, size=(800, 450),
+                 pos=wx.DefaultPosition, size=(600, 450),
                  style=wx.DEFAULT_FRAME_STYLE &~(wx.RESIZE_BORDER |
                                                  wx.CLOSE_BOX |
                                                  wx.SYSTEM_MENU),
