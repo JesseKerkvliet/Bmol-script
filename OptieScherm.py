@@ -25,8 +25,8 @@ class OptieScherm(wx.Frame):
                                             wx.TE_NO_VSCROLL),
                                id=-1, value=seq)
         self.seq.Enable(False)
-        self.Knop = KnoppenPaneel(self)
-        self.Vbox.Add(self.seq, 8, wx.ALL | wx.EXPAND)
+        self.Knop = KnoppenPaneel(self, vraag=True)
+        self.Vbox.Add(self.seq, 6.5, wx.ALL | wx.EXPAND)
         self.MaakPL()
         self.MaakGC()
         self.MaakTM()
@@ -91,4 +91,7 @@ class OptieScherm(wx.Frame):
 
     def GetSettingVal(self):
         pl = self.PrimerLen.GetValue()
+
+    def GetHelp(self):
+        return self.Knop.GetHelp()
         

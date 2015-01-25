@@ -26,11 +26,12 @@ class PrimerProg(wx.App):
     
     def SchermBeheer(self):
         naam = 'Primer generator 2.0'
+        fmt = (600,350)
         if self.SC == 2:
             self.frame = self.SchermLijst[self.SC](None, seq=self.seq,
-                                                   title=naam)
+                                                   title=naam, size=fmt)
         else:
-            self.frame = self.SchermLijst[self.SC](None, title=naam)
+            self.frame = self.SchermLijst[self.SC](None, title=naam, size=fmt)
 
     def KnopBeheer(self, event):
         EventID = event.GetId()
@@ -41,8 +42,33 @@ class PrimerProg(wx.App):
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
             print 'open helpscherm'
+            self.ShowMessage()
+    def GetHelpFromReadme(self, tl):
+        with open('README.txt', 'r') as f:
+            data = f.readlines()
+        go = False
+        tekst = ''
+        for regel in data:
+            if regel[:-1] == tl[0]:
+                go = True
+            elif regel[:-1]== tl[1]:
+                go = False
+            if go:
+                if regel[0] == '-' :
+                    title = regel[1:-1]
+                elif tl[0] not in regel and tl[1] not in regel:
+                    tekst += regel
+        return title, tekst
         
+    def ShowMessage(self):
+        if self.SC == 1:
+            title, tekst = self.GetHelpFromReadme(['<<', '>>'])
+        elif self.SC == 2:
+            title, tekst = self.GetHelpFromReadme(['[[', ']]'])
 
+        wx.MessageBox(tekst, title, 
+            wx.OK | wx.ICON_INFORMATION)
+    
     def SluitScherm(self):
         self.frame.Destroy()
         self.SC += 1

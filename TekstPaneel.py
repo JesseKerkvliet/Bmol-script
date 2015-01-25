@@ -45,7 +45,7 @@ class TekstPaneel(wx.Panel):
         schermtekst = self.Teksten()
         paneeltekst = wx.StaticText(self, id, "".join(schermtekst))
         if self.TekstTy == 1:
-            FSize = 22
+            FSize = 18
         font = wx.Font(FSize, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         paneeltekst.SetFont(font)
         box.Add(paneeltekst, 1, wx.ALL | wx.EXPAND)
@@ -60,5 +60,9 @@ class TekstPaneel(wx.Panel):
         toe te voegen aan de if statement.
         """
         if self.TekstTy == 1:
-            return ("""HOLA HOLA SENIOR EN WELKOM IN HET PRIMERPROGRAMMA
-                       VAN GROEP 2A""")
+            return ["\tWelkom bij Primer generator 2.0!\n\n",
+                    "Met dit programma is het mogelijk om primers te",
+                    " genereren op basis van je DNA sequentie.\n\n",
+                    "Ook is het mogelijk om instellingen zoals GC-percentage",
+                    ", Tm-waarde en primerlengte aan te passen. Druk op ",
+                    "volgende om door te gaan"]
