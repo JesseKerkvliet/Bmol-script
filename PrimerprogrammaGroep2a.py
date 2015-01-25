@@ -17,7 +17,7 @@ from OptieScherm import OptieScherm
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
-        self.SchermCounter = 0
+        self.SC = 0
         self.SchermLijst = [BeginScherm, InvoerScherm, OptieScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
@@ -25,16 +25,18 @@ class PrimerProg(wx.App):
         return True
     
     def SchermBeheer(self):
-        if self.SchermCounter == 2:
-            self.frame = self.SchermLijst[self.SchermCounter](None, seq=self.seq)
+        naam = 'Primer generator 2.0'
+        if self.SC == 2:
+            self.frame = self.SchermLijst[self.SC](None, seq=self.seq,
+                                                   title=naam)
         else:
-            self.frame = self.SchermLijst[self.SchermCounter](None)
+            self.frame = self.SchermLijst[self.SC](None, title=naam)
 
     def KnopBeheer(self, event):
         EventID = event.GetId()
         
         if EventID == self.frame.GetDoorgaan():
-            if self.SchermCounter == 1:
+            if self.SC == 1:
                 self.seq = self.frame.GetSeq()
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
@@ -43,7 +45,7 @@ class PrimerProg(wx.App):
 
     def SluitScherm(self):
         self.frame.Destroy()
-        self.SchermCounter += 1
+        self.SC += 1
         self.SchermBeheer()
 
     
