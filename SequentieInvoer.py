@@ -23,18 +23,26 @@ class SequentieInvoer(wx.Panel):
             parent: wx element, ouder van dit paneel.
             id: wx id.
             size: grootte.
-        <<<----DIT NOG DOEN! init doet niet veel bijzonders.--->>>
+        Als eerste wordt de sequentie paneel aangemaakt, gevolgt
+        door een statictext en een textctrl waar de sequentie
+        ingevoerd kan worden.
+        Daarna wordt een statictekst aangemaakt samen met een
+        blader knop. Vervolgens wordt de functie MaakMiniOpties()
+        aangeroepen waarmee de primer opties gemaakt mee worden.
+        Dan wordt self.invoer gebind op keyboard events als de toets
+        omhoog komt en elke event daarvan wordt doorgestuurd naar
+        HandleInvoer.
+        Daarna worden de tekst toegevoegd aan een horizontale boxsizer.
+        Vervolgens worden alle elementen toegevoegd aan een verticale
+        boxsizer en wordt de setsizer goed gezet.
         """
         self.SeqPan = wx.Panel.__init__(self, parent, id, size=size)
-
         self.uptext = wx.StaticText(self, id, 'Plak hier je sequentie:')
-
         self.invoer = wx.TextCtrl(self, id=-1, style=wx.TE_MULTILINE)
         self.dtext = wx.StaticText(self, id, 'Of blader vanaf je pc:',
                                    style=wx.ALIGN_LEFT)
         self.bknop = wx.Button(self, id=-1, label='Bladeren')
         self.OptiePan = self.MaakMiniOpties()
-
         self.invoer.Bind(wx.EVT_KEY_UP, self.HandleInvoer)
         self.HBox = wx.BoxSizer(wx.HORIZONTAL)
         self.HBox.Add(self.dtext)
@@ -60,6 +68,7 @@ class SequentieInvoer(wx.Panel):
         self.CheckOptieBoxen()
 
     def GetBladeren(self):
+        """Fucntie returnt bladerknop."""
         return self.bknop
 
     def SetBoxVal(self, seq, fout=False):

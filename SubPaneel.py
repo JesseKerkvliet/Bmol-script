@@ -1,9 +1,11 @@
 """
 Sebastiaan de Vriend 05-01-2015 SubPaneel class maken.
+Sebastiaan de Vriend 25-01-2015 Pep8.
 
 Script maakt een paneel aan.
 """
 import wx
+
 
 class SubPaneel(wx.Panel):
     """Klasse maakt een SubPaneel aan. Zie init voor documentatie."""

@@ -1,13 +1,15 @@
 """
 Sebastiaan de Vriend 05-01-2015 TekstPaneel schrijven
+Sebastiaan de Vriend 25-01-2015 Pep8.
 
 Classe maakt een tekst paneel aan met de gewenste tekst via type.
-Zie documentatie TekstPaneel.
+Zie documentatie TekstPaneel voor meer informatie.
 """
 
 import wx
 
 from SubPaneel import SubPaneel
+
 
 class TekstPaneel(wx.Panel):
     """Class maakt een tekst panel aan."""
@@ -39,7 +41,7 @@ class TekstPaneel(wx.Panel):
         Als laatste wordt de size gezet op box.
         """
         self.TekstPaneel = wx.Panel.__init__(self, parent, id, size=size,
-                                          style=wx.BORDER_SUNKEN)
+                                             style=wx.BORDER_SUNKEN)
         self.TekstTy = TekstTy
         box = wx.BoxSizer()
         schermtekst = self.Teksten()
@@ -50,7 +52,6 @@ class TekstPaneel(wx.Panel):
         paneeltekst.SetFont(font)
         box.Add(paneeltekst, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(box)
-        
 
     def Teksten(self):
         """
