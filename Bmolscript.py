@@ -124,7 +124,7 @@ def main():
     aan de tm_checker.
     '''
     primerlengte = 15
-    sequentie = open("seq.fa","r")
+    sequentie = open("seq2.fa","r")
     seq =  ''.join(sequentie.readlines())
     f_pcrdeel = positie_pakker(seq,'f')
     f_preprimerlist = primerpakken(f_pcrdeel)
