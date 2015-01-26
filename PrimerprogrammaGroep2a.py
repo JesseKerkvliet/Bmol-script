@@ -22,13 +22,14 @@ class PrimerProg(wx.App):
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
         self.seq = ''
+        self.bla='actgactacgatcagcatcgatcagcatcgactagcatcgactgtacatcagctacg'
         return True
     
     def SchermBeheer(self):
         naam = 'Primer generator 2.0'
         fmt = (600,350)
         if self.SC == 2:
-            self.frame = self.SchermLijst[self.SC](None, seq=self.seq,
+            self.frame = self.SchermLijst[self.SC](None, seq=self.bla,
                                                    title=naam, size=fmt)
         else:
             self.frame = self.SchermLijst[self.SC](None, title=naam, size=fmt)
@@ -73,6 +74,8 @@ class PrimerProg(wx.App):
         self.frame.Destroy()
         self.SC += 1
         self.SchermBeheer()
+
+    
 
     
 
