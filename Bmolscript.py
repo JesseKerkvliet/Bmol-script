@@ -133,7 +133,13 @@ def main(tm_list, cg_list, primerlength, seq):
     wordt de sequentie toegevoegd aan een lijst. De lijst wordt meegegeven
     aan de tm_checker.
     '''
+<<<<<<< HEAD
 
+=======
+    primerlengte = 15
+    sequentie = open("seq2.fa","r")
+    seq =  ''.join(sequentie.readlines())
+>>>>>>> origin/master
     f_pcrdeel = positie_pakker(seq,'f')
     f_preprimerlist = primerpakken(f_pcrdeel,primerlength)
     f_primerlist = tm_check(f_preprimerlist, tm_list)

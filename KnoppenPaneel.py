@@ -13,7 +13,8 @@ class KnoppenPaneel(wx.Panel):
     Class maakt knoppen paneel aan. Heeft mogelijkheid om ID's
     op te vragen.
     """
-    def __init__(self, parent, id=wx.ID_ANY, size=wx.DefaultSize, vraag=False):
+    def __init__(self, parent, id=wx.ID_ANY, size=wx.DefaultSize, vraag=False,
+                 knaam='Volgende'):
         """
         Input: 4
             Parent: Ouder van voor dit paneel.
@@ -22,6 +23,7 @@ class KnoppenPaneel(wx.Panel):
             vraag=False: Optie om een extra knop te tonen. De knop
                          is voor help informatie te tonen. Staat
                          standaard uit.
+            knaam: Naam voor de navigatie knop.
         De functie maakt als eerste de main paneel aan onder de naam
         self.KnopPaneel. Daarna wordt een Horizontale boxsizer
         aangemaakt die alles verticaal op volgorde plaatst.
@@ -37,7 +39,7 @@ class KnoppenPaneel(wx.Panel):
         """
         self.KnopPaneel = wx.Panel.__init__(self, parent, id, size=size)
         self.HBox = wx.BoxSizer(wx.HORIZONTAL)
-        self.Doorgaan = wx.Button(self, id=-1, label='Doorgaan')
+        self.Doorgaan = wx.Button(self, id=-1, label=knaam)
         self.HBox.Add(self.Doorgaan, 1, wx.ALL | wx.EXPAND)
         self.HBox.Add(self.TussenPaneel(), 1, wx.ALL | wx.EXPAND)
         if vraag:

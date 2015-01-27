@@ -6,9 +6,11 @@ Programma toon beginscherm voor primerprogramma. bla
 
 import wx
 
+
+from KnoppenPaneel import KnoppenPaneel
 from SubPaneel import SubPaneel
 from TekstPaneel import TekstPaneel
-from KnoppenPaneel import KnoppenPaneel
+
 
 class BeginScherm(wx.Frame):
     """
@@ -16,30 +18,39 @@ class BeginScherm(wx.Frame):
     welkoms boodschap. Meer informatie staat in de init documentatie.
     """
     def __init__(self, parent, id=wx.ID_ANY, title='Primer_programma',
-                 pos=wx.DefaultPosition, size=(700,700),
-                 style=wx.DEFAULT_FRAME_STYLE &~(wx.RESIZE_BORDER |
+                 pos=wx.DefaultPosition, size=(600, 450),
+                 style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER |
                                                   wx.CLOSE_BOX |
                                                   wx.SYSTEM_MENU),
                  name="PrimerScherm"):
+        """
+        De init heeft de volgende input waardes:
+            parent: Ouder van dit scherm.
+            id: willekeurige wx id. is benodigd voor wx.
+            title: titel van dit scherm.
+            pos: Positie van dit scherm.
+            size: Grootte van dit scherm.
+            style: Standaard style voor dit scherm.
+            name: Naam van dit scherm.
+        De classe begint met een super statement om de Frame class
+        te gebruiken.
+        Vervolgens wordt het mainpaneel aangemaakt en daarna
+        een verticale boxsizer.
+        In de boxsizer worden de elementen KnoppenPaneel en TekstPaneel
+        geplaatst.
+        Als laatste wordt het scherm zichtbaar gemaakt.
+        """
         super(BeginScherm, self).__init__(parent, id, title, pos, size,
-                                           style, name)
+                                          style, name)
         self.MainPaneel = SubPaneel(self)
         Vbox = wx.BoxSizer(wx.VERTICAL)
         self.Text = TekstPaneel(self.MainPaneel, TekstTy=1)
         self.Knop = KnoppenPaneel(self.MainPaneel)
-        Vbox.Add(self.Text, 4, wx.ALL | wx.EXPAND)
-        Vbox.Add(self.Knop, 1, wx.ALL | wx.EXPAND)
+        Vbox.Add(self.Text, 9.5, wx.ALL | wx.EXPAND)
+        Vbox.Add(self.Knop, 0.5, wx.ALL | wx.EXPAND)
         self.MainPaneel.SetSizer(Vbox)
         self.Show()
-    
-        
-    def GetDoorgaan(self):
-        return self.Knop.GetDoorgaan()
 
-    def GetHelp(self):
-        return self.Knop.GetHelp()
-    
-if __name__ == "__main__":
-    app = wx.App(False)
-    frame = BeginScherm(None)
-    app.MainLoop()
+    def GetDoorgaan(self):
+        """Functie returned aanroep van Knop."""
+        return self.Knop.GetDoorgaan()

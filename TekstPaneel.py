@@ -1,13 +1,15 @@
 """
 Sebastiaan de Vriend 05-01-2015 TekstPaneel schrijven
+Sebastiaan de Vriend 25-01-2015 Pep8.
 
 Classe maakt een tekst paneel aan met de gewenste tekst via type.
-Zie documentatie TekstPaneel.
+Zie documentatie TekstPaneel voor meer informatie.
 """
 
 import wx
 
 from SubPaneel import SubPaneel
+
 
 class TekstPaneel(wx.Panel):
     """Class maakt een tekst panel aan."""
@@ -39,18 +41,17 @@ class TekstPaneel(wx.Panel):
         Als laatste wordt de size gezet op box.
         """
         self.TekstPaneel = wx.Panel.__init__(self, parent, id, size=size,
-                                          style=wx.BORDER_SUNKEN)
+                                             style=wx.BORDER_SUNKEN)
         self.TekstTy = TekstTy
         box = wx.BoxSizer()
         schermtekst = self.Teksten()
         paneeltekst = wx.StaticText(self, id, "".join(schermtekst))
         if self.TekstTy == 1:
-            FSize = 22
+            FSize = 18
         font = wx.Font(FSize, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         paneeltekst.SetFont(font)
         box.Add(paneeltekst, 1, wx.ALL | wx.EXPAND)
         self.SetSizer(box)
-        
 
     def Teksten(self):
         """
@@ -60,5 +61,9 @@ class TekstPaneel(wx.Panel):
         toe te voegen aan de if statement.
         """
         if self.TekstTy == 1:
-            return ("""HOLA HOLA SENIOR EN WELKOM IN HET PRIMERPROGRAMMA
-                       VAN GROEP 2A""")
+            return ["\tWelkom bij Primer generator 2.0!\n\n",
+                    "Met dit programma is het mogelijk om primers te",
+                    " genereren op basis van je DNA sequentie.\n\n",
+                    "Ook is het mogelijk om instellingen zoals GC-percentage",
+                    ", Tm-waarde en primerlengte aan te passen. Druk op ",
+                    "volgende om door te gaan"]

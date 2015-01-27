@@ -12,34 +12,70 @@ import wx
 
 from Beginscherm import BeginScherm
 from InvoerScherm import InvoerScherm
+from OptieScherm import OptieScherm
 
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
-        self.SchermCounter =0
-        self.SchermLijst = [BeginScherm, InvoerScherm]
+        self.SC = 0
+        self.SchermLijst = [BeginScherm, InvoerScherm, OptieScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
+        self.seq = ''
+        self.bla='actgactacgatcagcatcgatcagcatcgactagcatcgactgtacatcagctacg'
         return True
     
     def SchermBeheer(self):
-        self.frame = self.SchermLijst[self.SchermCounter](None)
+        naam = 'Primer generator 2.0'
+        fmt = (600,350)
+        if self.SC == 2:
+            self.frame = self.SchermLijst[self.SC](None, seq=self.bla,
+                                                   title=naam, size=fmt)
+        else:
+            self.frame = self.SchermLijst[self.SC](None, title=naam, size=fmt)
 
     def KnopBeheer(self, event):
         EventID = event.GetId()
-        print EventID
+        
         if EventID == self.frame.GetDoorgaan():
-            if self.SchermCounter == 1:
-                print self.frame.GetSeq()
+            if self.SC == 1:
+                self.seq = self.frame.GetSeq()
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
             print 'open helpscherm'
+            self.ShowMessage()
+    def GetHelpFromReadme(self, tl):
+        with open('README.txt', 'r') as f:
+            data = f.readlines()
+        go = False
+        tekst = ''
+        for regel in data:
+            if regel[:-1] == tl[0]:
+                go = True
+            elif regel[:-1]== tl[1]:
+                go = False
+            if go:
+                if regel[0] == '-' :
+                    title = regel[1:-1]
+                elif tl[0] not in regel and tl[1] not in regel:
+                    tekst += regel
+        return title, tekst
         
+    def ShowMessage(self):
+        if self.SC == 1:
+            title, tekst = self.GetHelpFromReadme(['<<', '>>'])
+        elif self.SC == 2:
+            title, tekst = self.GetHelpFromReadme(['[[', ']]'])
 
+        wx.MessageBox(tekst, title, 
+            wx.OK | wx.ICON_INFORMATION)
+    
     def SluitScherm(self):
         self.frame.Destroy()
-        self.SchermCounter += 1
+        self.SC += 1
         self.SchermBeheer()
+
+    
 
     
 
