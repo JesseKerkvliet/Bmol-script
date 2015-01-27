@@ -26,10 +26,10 @@ def positie_pakker(pp_sequentie,pp_richting):
     if beginpos == -1:
       beginpos = 1
     if eindpos == -1:
-      eindpos = pp_sequentie.find('<')   
-  return pp_sequentie[(beginpos-1):eindpos]
+      eindpos = pp_sequentie.find('<')
+  return pp_sequentie[beginpos:eindpos]
       
-def tm_check(tm_preprimerlist):
+def tm_check(tm_preprimerlist, tm_list):
     '''
     Deze functie krijgt de lijst met gemaakte stukjes primers (preprimers)
     mee. De lijst wordt gekopieerd en voor ieder element in de lijst
@@ -47,10 +47,10 @@ def tm_check(tm_preprimerlist):
         
         teldict = Counter(y)
         tm = 2*teldict["T"] + 2*teldict["A"] + 4*teldict["G"] + 4*teldict["C"]
-        if tm < 50 or tm > 60:
+        if tm < tm_list[0] or tm > tm_list[1]:
             primerlist.remove(y)         
     return primerlist
-def cg_check(cg_primerlist):
+def cg_check(cg_primerlist, cg_list):
     '''
     Deze functie krijgt de primerlijst mee die meegegeven is door de tm_check
     functie. Er wordt een kopie gemaakt van de lijst. Voor elk element
@@ -66,11 +66,11 @@ def cg_check(cg_primerlist):
     for i in primers:
         teldict = Counter(i)
         cg_content = (teldict["G"] + teldict["C"])/ float(len(i)) * 100
-        if cg_content < 50.0 or cg_content > 60.0:
+        if cg_content < cg_list[0] or cg_content > cg_list[1]:
             primers.remove(i)          
     return primers
 
-def primerpakken(pp_sequentie):
+def primerpakken(pp_sequentie, pp_primerlength):
     '''
     De ingelezen sequentie wordt meegegeven.
     Er wordt in de sequentie gezocht naar de tekens die aangeven dat het
@@ -83,20 +83,12 @@ def primerpakken(pp_sequentie):
     De lijst met preprimers wordt teruggegeven.
     '''
     preprimerlist = []
-    exclude_start = pp_sequentie.find("<")
-    exclude_stop = pp_sequentie.find(">")
     for x in range(len(pp_sequentie)):
-        
-        preprimer = pp_sequentie[x:x+15]
-        if len(preprimer) == 15 and ">" not in preprimer and "<"not in preprimer:
+        preprimer = pp_sequentie[x:x+pp_primerlength]
+        if len(preprimer) == pp_primerlength:
             preprimerlist.append(preprimer)
         if "{" in preprimer or "}" in preprimer or "[" in preprimer or "]" in preprimer:
           preprimerlist.remove(preprimer)
-        if x < exclude_stop and x > exclude_start:
-            try:
-              preprimerlist.remove(preprimer)
-            except ValueError:
-              pass
     return preprimerlist
 
 def reverser(r_seq):
@@ -113,8 +105,26 @@ def reverser(r_seq):
     for teken in r_seq[::-1]:
       complement_list += complement_dict[teken]
     
-    return  ''.join(complement_list)     
-def main():
+    return  ''.join(complement_list)
+  
+def returncheck(rc_primers):
+    '''
+    De gemaakte primers worden meegegeven. Er wordt gekeken naar de lengte van
+    de lijst. Als deze groter is dan vijf wordt er net zo lang van het einde
+    van de lijst primers verwijderd, totdat de lijst nog vijf primers lang is.
+    Er wordt een melding gemaakt van het verwijderen van primers.
+    De lijst met vijf elementen wordt teruggegeven.
+    '''
+    if len(rc_primers) > 5:
+      print "Er zijn meer dan vijf primers gevonden."
+      print "Alleen de eerste vijf worden weergegeven."
+      print "Kies voor een beter resultaat een kleinere range."
+      while len(rc_primers) > 5:
+        rc_primers.remove(rc_primers[-1])
+    
+    return rc_primers                
+
+def main(tm_list, cg_list, primerlength, seq):
     '''
     Een bestand wordt geopend met een sequentie erin. Deze sequentie wordt
     in een string omgezet en de sequentie wordt op de juiste posities geknipt
@@ -123,18 +133,30 @@ def main():
     wordt de sequentie toegevoegd aan een lijst. De lijst wordt meegegeven
     aan de tm_checker.
     '''
-    primerlengte = 15
-    sequentie = open("seq.fa","r")
-    seq =  ''.join(sequentie.readlines())
+
     f_pcrdeel = positie_pakker(seq,'f')
-    f_preprimerlist = primerpakken(f_pcrdeel)
-    f_primerlist = tm_check(f_preprimerlist)
-    f_primers = cg_check(f_primerlist)
+    f_preprimerlist = primerpakken(f_pcrdeel,primerlength)
+    f_primerlist = tm_check(f_preprimerlist, tm_list)
+    f_primers = cg_check(f_primerlist, cg_list)
+    f_primers = returncheck(f_primers)
     print f_primers, "na gc_check"
+    
     r_reversed = reverser(seq)
     r_pcrdeel = positie_pakker(r_reversed, 'r')
-    r_preprimerlist = primerpakken(r_pcrdeel)
-    r_primerlist = tm_check(r_preprimerlist)
-    r_primers = cg_check(r_preprimerlist)
+    r_preprimerlist = primerpakken(r_pcrdeel, primerlength)
+    r_primerlist = tm_check(r_preprimerlist, tm_list)
+    r_primers = cg_check(r_preprimerlist, cg_list)
+    r_primers = returncheck(r_primers)
     print r_primers, "r, na gc_check"
-main()
+
+    returnlijst = []
+    returnlijst.append(f_primers)
+    returnlijst.append(r_primers)
+    print returnlijst
+    return returnlijst
+  
+sequentie = open("seq.fa","r")
+seq =  ''.join(sequentie.readlines())
+
+main([10,60],[10.0,60.0], 15, seq)
+
