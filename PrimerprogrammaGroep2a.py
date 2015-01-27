@@ -31,13 +31,19 @@ class PrimerProg(wx.App):
           
     def SchermBeheer(self):
         naam = 'Primer generator 2.0'
-        fmt = (600,350)
+        fmt = (700,350)
         if self.SC == 2:
             self.frame = self.SchermLijst[self.SC](None, seq=self.seq,
                                                    title=naam, size=fmt)
         elif self.SC == 3:
+            tekens = '[]{}<>'
+            for teken in tekens:
+                
+                self.seq = self.seq.replace(teken, "")
+            
             self.frame = self.SchermLijst[self.SC](None, primers=self.res,
-                                                   title=naam, size=fmt)
+                                                   title=naam, size=fmt,
+                                                   seq=self.seq)
         else:
             self.frame = self.SchermLijst[self.SC](None, title=naam, size=fmt)
 
@@ -52,6 +58,8 @@ class PrimerProg(wx.App):
                 
                 self.res = Bmolscript.main(self.info[2], self.info[1],
                                            self.info[0], self.seq)
+            elif self.SC == 3:
+                self.SC = 0
                 
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
@@ -84,6 +92,10 @@ class PrimerProg(wx.App):
             wx.OK | wx.ICON_INFORMATION)
     
     def SluitScherm(self):
+        """
+        De functie sluit self.frame, telt 1 bij de schermteller en
+        start de functie SchermBeheer op.
+        """
         self.frame.Destroy()
         self.SC += 1
         self.SchermBeheer()

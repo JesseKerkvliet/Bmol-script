@@ -37,7 +37,7 @@ class SequentieInvoer(wx.Panel):
         self.MaakSequentieBox()
         self.MaakMiniOpties()
         self.VBox = wx.BoxSizer(wx.VERTICAL)
-        self.VBox.Add(self.uptext, 0.5, wx.ALL | wx.EXPAND)
+        self.VBox.Add(self.uptext, 0.5, wx.ALL | wx.EXPAND, 2)
         self.VBox.Add(self.invoer, 2, wx.ALL | wx.EXPAND)
         self.VBox.Add(self.HBox, 0.5, wx.ALL | wx.EXPAND)
         self.VBox.Add(self.OptieBox, 2, wx.ALL | wx.EXPAND)
@@ -87,6 +87,7 @@ class SequentieInvoer(wx.Panel):
                                    style=wx.ALIGN_LEFT)
         self.bknop = wx.Button(self, id=-1, label='Bladeren')
         self.HBox = wx.BoxSizer(wx.HORIZONTAL)
+        self.HBox.AddSpacer(10)
         self.HBox.Add(self.dtext)
         self.HBox.Add(self.bknop)
 
@@ -140,6 +141,7 @@ class SequentieInvoer(wx.Panel):
         """
         for lijst in self.OptieLijst:
             hbox = wx.BoxSizer(wx.HORIZONTAL)
+            hbox.AddSpacer(10)
             lijst['tb'] = wx.StaticText(self, id=-1, label=lijst['Text'])
             lijst['idL'] = wx.lib.intctrl.IntCtrl(self, -1, name='L')
             streepje = wx.StaticText(self, id=-1, label='-')

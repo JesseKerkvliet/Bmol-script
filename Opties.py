@@ -123,13 +123,15 @@ class Opties(wx.Panel):
             return [val, maxv]
         elif bracklen >= 30 and lislen >= 30:
             return [val, maxv]
-        elif lislen == 0 or bracklen == 0 and bracklen + lislen >= 30:
+        elif lislen == 0 and bracklen + lislen >= 30 or bracklen == 0 and bracklen + lislen >= 30:
             return [val, maxv]
         else:
             if bracklen < lislen:
                 return [bracklen, bracklen]
-            else:
+            elif lislen < bracklen:
                 return [lislen, lislen]
+            else:
+                return [bracklen, bracklen]
         
                 
         
