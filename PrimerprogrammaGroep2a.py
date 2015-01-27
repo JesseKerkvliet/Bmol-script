@@ -13,23 +13,30 @@ import wx
 from Beginscherm import BeginScherm
 from InvoerScherm import InvoerScherm
 from OptieScherm import OptieScherm
+from ResultaatScherm import ResultaatScherm
+
+import Bmolscript
 
 class PrimerProg(wx.App):
     """Klasse roept alles aan."""
     def OnInit(self):
         self.SC = 0
-        self.SchermLijst = [BeginScherm, InvoerScherm, OptieScherm]
+        self.SchermLijst = [BeginScherm, InvoerScherm, OptieScherm,
+                            ResultaatScherm]
         self.SchermBeheer()
         self.Bind(wx.EVT_BUTTON, self.KnopBeheer)
         self.seq = ''
-        self.bla='actgactacgatcagcatcgatcagcatcgactagcatcgactgtacatcagctacg'
+        #bla = 'atacacacacacacacacacacaacaccacaacaccacacaac'
         return True
-    
+          
     def SchermBeheer(self):
         naam = 'Primer generator 2.0'
         fmt = (600,350)
         if self.SC == 2:
-            self.frame = self.SchermLijst[self.SC](None, seq=self.bla,
+            self.frame = self.SchermLijst[self.SC](None, seq=self.seq,
+                                                   title=naam, size=fmt)
+        elif self.SC == 3:
+            self.frame = self.SchermLijst[self.SC](None, primers=self.res,
                                                    title=naam, size=fmt)
         else:
             self.frame = self.SchermLijst[self.SC](None, title=naam, size=fmt)
@@ -39,11 +46,17 @@ class PrimerProg(wx.App):
         
         if EventID == self.frame.GetDoorgaan():
             if self.SC == 1:
-                self.seq = self.frame.GetSeq()
+                self.seq = self.frame.GetSeq().upper()
+            elif self.SC == 2:
+                self.info = self.frame.GetSettingVal()
+                
+                self.res = Bmolscript.main(self.info[2], self.info[1],
+                                           self.info[0], self.seq)
+                
             self.SluitScherm()
         elif EventID == self.frame.GetHelp():
-            print 'open helpscherm'
             self.ShowMessage()
+    
     def GetHelpFromReadme(self, tl):
         with open('README.txt', 'r') as f:
             data = f.readlines()

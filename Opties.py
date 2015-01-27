@@ -28,6 +28,7 @@ class Opties(wx.Panel):
         self.Vbox.Add(self.seq, 2, wx.ALL | wx.EXPAND)
         self.seq.Enable(False)
         sliderlijst = self.MaakSliders()
+        self.seq = seq
         self.MaakPL()
         self.MaakBalk(sliderlijst[0], 'GC waardes:')
         self.MaakBalk(sliderlijst[1], 'TM waardes:')
@@ -38,11 +39,11 @@ class Opties(wx.Panel):
         De functie maakt de 4 sliders aan voor minimale en maximale
         gc en tm waardes en geeft de elementen terug in een lijst.
         """
-        self.MinGC = wx.Slider(self, value=55, minValue=40, maxValue=55,
+        self.MinGC = wx.Slider(self, value=55, minValue=10, maxValue=55,
                                style=wx.SL_LABELS)
         self.MaxGC = wx.Slider(self, value=60, minValue=60, maxValue=75,
                                style=wx.SL_LABELS)
-        self.MinTM = wx.Slider(self, value=55, minValue=40, maxValue=55,
+        self.MinTM = wx.Slider(self, value=55, minValue=10, maxValue=55,
                                style=wx.SL_LABELS)
         self.MaxTM = wx.Slider(self, value=60, minValue=60, maxValue=75,
                                style=wx.SL_LABELS)
@@ -62,6 +63,7 @@ class Opties(wx.Panel):
         wordt er nog een ruimte toegevoegd om de slider van de rand van
         het scherm af te houden en wordt de hbox toegevoegd aan Vbox.
         """
+        
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(10)
         hbox.Add(self.MaakTekst(naam, 'l'), 0, wx.ALL |
@@ -104,6 +106,34 @@ class Opties(wx.Panel):
                                    style=wx.ALIGN_LEFT)
         return allign
 
+    def CheckValues(self):
+        val = 20
+        maxv = 30
+        bracklen = 0
+        lislen = 0
+        for t in [['[', ']'], ['{', '}']]:
+            if t[0] in self.seq:
+                seq1= self.seq.split(t[0])[1]
+                seq2= seq1.split(t[1])[0]
+                if t[0] == '[':
+                    bracklen += len(seq2)
+                else:
+                    lislen += len(seq2)
+        if bracklen == 0 and lislen == 0:
+            return [val, maxv]
+        elif bracklen >= 30 and lislen >= 30:
+            return [val, maxv]
+        elif lislen == 0 or bracklen == 0 and bracklen + lislen >= 30:
+            return [val, maxv]
+        else:
+            if bracklen < lislen:
+                return [bracklen, bracklen]
+            else:
+                return [lislen, lislen]
+        
+                
+        
+        
     def MaakPL(self):
         """
         Input: 0
@@ -117,7 +147,9 @@ class Opties(wx.Panel):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         text = wx.StaticText(self, id=-1, label='Primer Lengte:',
                              style=wx.ALIGN_LEFT)
-        self.PrimerLen = wx.Slider(self, value=20, minValue=10, maxValue=30,
+        v = self.CheckValues()
+        self.PrimerLen = wx.Slider(self, value=v[0], minValue=10,
+                                   maxValue=v[1],
                                    style=wx.SL_LABELS, name='Primer lengte:')
         hbox.AddSpacer(10)
         hbox.Add(text, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL |
@@ -134,8 +166,8 @@ class Opties(wx.Panel):
         terug gegven.
         """
         pl = self.PrimerLen.GetValue()
-        gn = self.MinGC.GetValue()
-        gx = self.MaxGC.GetValue()
+        gn = float(self.MinGC.GetValue())
+        gx = float(self.MaxGC.GetValue())
         tn = self.MinTM.GetValue()
         tx = self.MaxTM.GetValue()
         lijst = [pl, [gn, gx], [tn, tx]]

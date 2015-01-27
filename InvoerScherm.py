@@ -103,8 +103,10 @@ class InvoerScherm(wx.Frame):
             bestandsnaam = self.blad.GetPath()
             with open(bestandsnaam, 'r') as f:
                 data = f.readlines()
-            seqff = [x[:-1] for x in data if x[0] != '>']
-            self.seq.SetBoxVal("".join(seqff))
+            seqff = [x for x in data if x[0] != '>']
+            seqnew = "".join(seqff)
+            seqnew.replace("\n", "")
+            self.seq.SetBoxVal(seqnew)
             self.seq.HandleInvoer(0)
         self.blad.Destroy()
 
@@ -134,13 +136,24 @@ class InvoerScherm(wx.Frame):
         else:
             self.checklist['seq'] = 1
         for tek in tekens:
+            
             if tek[0] in self.seq.GetSeq():
                 if tek[1] in self.seq.GetSeq().split(tek[0])[1]:
+                    if tek[0] == '[' or tek[0] == '{':
+                        self.PrimerRegio(tek)
                     self.checklist[tek[0]] = 1
                 else:
                     self.checklist[tek[0]] = 0
         self.SwitchDoorgaan()
 
+    def PrimerRegio(self, tekenl):
+        seq1 = self.seq.GetSeq().split(tekenl[0])[1]
+        
+        seq2 = seq1.split(tekenl[1])[0]
+        if len(seq2) < 15:
+            self.checklist['len' + tekenl[0]] = 0
+        else:
+            self.checklist['len' + tekenl[0]] = 1
     def SwitchDoorgaan(self):
         """
         Input: 0

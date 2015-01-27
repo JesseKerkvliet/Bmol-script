@@ -46,8 +46,7 @@ class TekstPaneel(wx.Panel):
         box = wx.BoxSizer()
         schermtekst = self.Teksten()
         paneeltekst = wx.StaticText(self, id, "".join(schermtekst))
-        if self.TekstTy == 1:
-            FSize = 18
+        FSize = 18
         font = wx.Font(FSize, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         paneeltekst.SetFont(font)
         box.Add(paneeltekst, 1, wx.ALL | wx.EXPAND)
@@ -67,3 +66,7 @@ class TekstPaneel(wx.Panel):
                     "Ook is het mogelijk om instellingen zoals GC-percentage",
                     ", Tm-waarde en primerlengte aan te passen. Druk op ",
                     "volgende om door te gaan"]
+        elif self.TekstTy == 2:
+            return ["Helaas zijn onvoldoende primers gegenereerd. Probeer",
+                    " het opnieuw met een andere sequentie, of pas de",
+                    " instellingen aan."]
