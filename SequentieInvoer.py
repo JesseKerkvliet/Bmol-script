@@ -1,6 +1,7 @@
 """
 Sebastiaan de Vriend 06-01-15 Sequentie invoer maken.
 Sebastiaan de Vriend 23-01-15 Afmaken, pep8 etc.
+Sebastiaan de Vriend 27-01-15 Afronding en pep8.
 
 Script zorgt voor sequentie van gebruikert.
 """
@@ -26,33 +27,68 @@ class SequentieInvoer(wx.Panel):
         Als eerste wordt de sequentie paneel aangemaakt, gevolgt
         door een statictext en een textctrl waar de sequentie
         ingevoerd kan worden.
-        Daarna wordt een statictekst aangemaakt samen met een
-        blader knop. Vervolgens wordt de functie MaakMiniOpties()
+        Vervolgens wordt de functie MaakMiniOpties()
         aangeroepen waarmee de primer opties gemaakt mee worden.
-        Dan wordt self.invoer gebind op keyboard events als de toets
-        omhoog komt en elke event daarvan wordt doorgestuurd naar
-        HandleInvoer.
         Daarna worden de tekst toegevoegd aan een horizontale boxsizer.
         Vervolgens worden alle elementen toegevoegd aan een verticale
         boxsizer en wordt de setsizer goed gezet.
         """
         self.SeqPan = wx.Panel.__init__(self, parent, id, size=size)
-        self.uptext = wx.StaticText(self, id, 'Plak hier je sequentie:')
-        self.invoer = wx.TextCtrl(self, id=-1, style=wx.TE_MULTILINE)
-        self.dtext = wx.StaticText(self, id, 'Of blader vanaf je pc:',
-                                   style=wx.ALIGN_LEFT)
-        self.bknop = wx.Button(self, id=-1, label='Bladeren')
-        self.OptiePan = self.MaakMiniOpties()
-        self.invoer.Bind(wx.EVT_KEY_UP, self.HandleInvoer)
-        self.HBox = wx.BoxSizer(wx.HORIZONTAL)
-        self.HBox.Add(self.dtext)
-        self.HBox.Add(self.bknop)
+        self.MaakSequentieBox()
+        self.MaakMiniOpties()
         self.VBox = wx.BoxSizer(wx.VERTICAL)
         self.VBox.Add(self.uptext, 0.5, wx.ALL | wx.EXPAND)
         self.VBox.Add(self.invoer, 2, wx.ALL | wx.EXPAND)
         self.VBox.Add(self.HBox, 0.5, wx.ALL | wx.EXPAND)
-        self.VBox.Add(self.OptiePan, 2, wx.ALL | wx.EXPAND)
+        self.VBox.Add(self.OptieBox, 2, wx.ALL | wx.EXPAND)
         self.SetSizer(self.VBox)
+
+    def MaakMiniOpties(self):
+        """
+        De functie maakt de textvelden voor de standaard opties
+        en zet deze in een boxsizer en in een globale lijst om
+        waardes eruit te halen / erin te zetten.
+        De functie start met een globale optielijst met daarin
+        dictionaries die gebruikt worden voor de textctr, en de
+        texten die gemaakt worden in de loop.
+        De ID's in de dictionaries zorgen ervoor dat de bijbehorende
+        waardes en objecten eenvoudig op te sporen zijn.
+        Na de dictionary wordt de Verticale boxsizer Optiebox
+        gemaakt. Hierin komen de objecten in te staan van de loop die
+        daarna start.
+        De loop wordt aangezet in de functie ToonMiniOpties().
+        """
+        self.OptieLijst = [{'Text': 'Uitgesloten Regio <>:', 'L': '<',
+                            'R': '>', 'idL': 0, 'idR': 0, 'tb': 0},
+                           {'Text': "3'-5' primer voorkeur []:", 'L': '[',
+                            'R': ']', 'idL': 0, 'idR': 0, 'tb': 0},
+                           {'Text': "5'-3' primer voorkeur {}: ", 'L': '{',
+                            'R': '}', 'idL': 0, 'idR': 0, 'tb': 0}]
+
+        self.OptieCtrl = []
+        self.OptieBox = wx.BoxSizer(wx.VERTICAL)
+        self.ToonMiniOpties()
+
+    def MaakSequentieBox(self):
+        """
+        De functie maakt 2 static teksten aan, de tekstveld
+        voor de sequentie invoer en de browse knop. en plaatst
+        de browseknop met de tekst in een horizontal boxsizer.
+        Ook wordt de sequentiebox gebind aan een keyboard event
+        om te controleren wat de gebruiker invoerd. De event
+        wordt doorgestuurd naar HandleInvoer.
+        """
+        self.uptext = wx.StaticText(self, id=-1,
+                                    label='Plak hier je sequentie:')
+        self.invoer = wx.TextCtrl(self, id=-1, style=wx.TE_MULTILINE)
+        self.invoer.Bind(wx.EVT_KEY_UP, self.HandleInvoer)
+        self.dtext = wx.StaticText(self, id=-1,
+                                   label='Of blader vanaf je pc:',
+                                   style=wx.ALIGN_LEFT)
+        self.bknop = wx.Button(self, id=-1, label='Bladeren')
+        self.HBox = wx.BoxSizer(wx.HORIZONTAL)
+        self.HBox.Add(self.dtext)
+        self.HBox.Add(self.bknop)
 
     def HandleInvoer(self, event):
         """
@@ -91,38 +127,17 @@ class SequentieInvoer(wx.Panel):
         """Functie returnt de str in de textctr van self.invoer."""
         return self.invoer.GetValue()
 
-    def MaakMiniOpties(self):
+    def ToonMiniOpties(self):
         """
-        De functie maakt de textvelden voor de standaard opties
-        en zet deze in een boxsizer en in een globale lijst om
-        waardes eruit te halen / erin te zetten.
-        De functie start met een globale optielijst met daarin
-        dictionaries die gebruikt worden voor de textctr, en de
-        texten die gemaakt worden in de loop.
-        De ID's in de dictionaries zorgen ervoor dat de bijbehorende
-        waardes en objecten eenvoudig op te sporen zijn.
-        Na de dictionary wordt de Verticale boxsizer Optiebox
-        gemaakt. Hierin komen de objecten in te staan van de loop die
-        daarna start.
         In de loop wordt hbox aangemaakt, dit is een horizontale
         boxsizer.
         Vervolgens wordt text, L(inker)veld, streepje en R(echter)veld
         aangemaakt met de text / id's van de dictionary. Deze worden
         op die volgorde ook toegevoegd aan de BoxSizer hbox en
         als laatste wordt hbox toegevoegd aan OptieBox.
-        Na de loop wordt OptieBox teruggegeven.
-
-        Output: 1
-            OptieBox: BoxSizer met daarin aangemaakte objecten.
+        Om alles netjes te zetten wordt de functie OptieBoxStatus
+        aangeroepen.
         """
-        self.OptieLijst = [{'Text': 'Uitgesloten Regio <>:', 'L': '<',
-                            'R': '>', 'idL': 0, 'idR': 0, 'tb': 0},
-                           {'Text': "3'-5' primer voorkeur []:", 'L': '[',
-                            'R': ']', 'idL': 0, 'idR': 0, 'tb': 0},
-                           {'Text': "5'-3' primer voorkeur {}: ", 'L': '{',
-                            'R': '}', 'idL': 0, 'idR': 0, 'tb': 0}]
-        self.OptieCtrl = []
-        OptieBox = wx.BoxSizer(wx.VERTICAL)
         for lijst in self.OptieLijst:
             hbox = wx.BoxSizer(wx.HORIZONTAL)
             lijst['tb'] = wx.StaticText(self, id=-1, label=lijst['Text'])
@@ -133,11 +148,10 @@ class SequentieInvoer(wx.Panel):
             hbox.Add(lijst['idL'])
             hbox.Add(streepje)
             hbox.Add(Rveld)
-            OptieBox.Add(hbox)
+            self.OptieBox.Add(hbox)
             self.OptieCtrl.append(lijst['idL'])
             self.OptieCtrl.append(lijst['idR'])
         self.OptieBoxStatus()
-        return OptieBox
 
     def OptieBoxStatus(self):
         """
@@ -270,7 +284,6 @@ class SequentieInvoer(wx.Panel):
         op het scherm van de gebruiker getoont wordt.
         """
         for l in self.OptieLijst:
-
             if l['idL'].GetValue() - l['idR'].GetValue() >= 0:
                 if l['idR'].GetValue() != 0:
                     l['tb'].SetBackgroundColour('red')

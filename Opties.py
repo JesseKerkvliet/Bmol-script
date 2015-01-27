@@ -1,35 +1,43 @@
 """
 Sebastiaan de Vriend 26-01-2015 Script schrijven om de kleuren te fixen.
-
+Sebastiaan de Vriend 27-01-2015 Afronding en pep8.
 """
 
 import wx
 
 from SubPaneel import SubPaneel
 
+
 class Opties(wx.Panel):
+    """De classe maakt de extra opties aan."""
     def __init__(self, parent, seq, id=wx.ID_ANY, size=wx.DefaultSize):
+        """
+        De functie maakt als eerste de standaard paneel aan
+        gevolgt voor een vertical boxsizer. Daarna wordt de sequentie
+        textbox aangemaakt waarmee alleen uitgelezen kan worden.
+        Daarna worden de sliders aangemaakt, gevolgt door de
+        Primerlengte slider. Als dit gedaan is, dan wordt de functie
+        maak balk aangeroepen en wordt er elke keer een slider set
+        meegegeven. Als laatste wordt de self.SetSizer goedgezet.
+        """
         self.OptiePan = wx.Panel.__init__(self, parent, id, size=size)
         self.Vbox = wx.BoxSizer(wx.VERTICAL)
-        self.seq = wx.TextCtrl(self, style=(wx.TE_MULTILINE| wx.TE_READONLY |
+        self.seq = wx.TextCtrl(self, style=(wx.TE_MULTILINE | wx.TE_READONLY |
                                             wx.TE_NO_VSCROLL),
                                id=-1, value=seq)
         self.Vbox.Add(self.seq, 2, wx.ALL | wx.EXPAND)
         self.seq.Enable(False)
         sliderlijst = self.MaakSliders()
-        
         self.MaakPL()
-        #self.MaakGC()
-        #self.MaakTM()
-        for x in range(len(sliderlijst)):
-            if x == 0:
-                self.MaakBalk(sliderlijst[x], 'GC waardes:')
-            else:
-                self.MaakBalk(sliderlijst[x], 'TM waardes:')
-            
+        self.MaakBalk(sliderlijst[0], 'GC waardes:')
+        self.MaakBalk(sliderlijst[1], 'TM waardes:')
         self.SetSizer(self.Vbox)
 
     def MaakSliders(self):
+        """
+        De functie maakt de 4 sliders aan voor minimale en maximale
+        gc en tm waardes en geeft de elementen terug in een lijst.
+        """
         self.MinGC = wx.Slider(self, value=55, minValue=40, maxValue=55,
                                style=wx.SL_LABELS)
         self.MaxGC = wx.Slider(self, value=60, minValue=60, maxValue=75,
@@ -41,77 +49,61 @@ class Opties(wx.Panel):
         return [[self.MinGC, self.MaxGC], [self.MinTM, self.MaxTM]]
 
     def MaakBalk(self, ls, naam):
+        """
+        Input: 2
+            ls: lijstm met elementen.
+            naam: str met naam voor balk.
+        De functie zet een rij alligned neer. Dit wordt gedaan
+        met een horizontal boxsizer met als eerste een spatie.
+        Daarna wordt de tekst functie aangeroepen en
+        de tekst daarvan wordt rechts in het midden geplaatst.
+        Daarna wordt de functie MaakStukje twee keer aangeroepen en
+        daaraan wordt de tekst en een slider meegegeven. Als laatste
+        wordt er nog een ruimte toegevoegd om de slider van de rand van
+        het scherm af te houden en wordt de hbox toegevoegd aan Vbox.
+        """
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         hbox.AddSpacer(10)
         hbox.Add(self.MaakTekst(naam, 'l'), 0, wx.ALL |
                  wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        hbox.Add(self.MaakTekst('min', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        hbox.AddSpacer(40)
-        hbox.Add(ls[0], 1, wx.ALL )
-        hbox.Add(self.TP(), 1, wx.ALL)
-        hbox.Add(self.MaakTekst('max', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        hbox.AddSpacer(40)
-        hbox.Add(ls[1], 1, wx.ALL )
-        hbox.AddSpacer(10)
-        self.Vbox.Add(hbox, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL)
-        
-    def MaakGC(self):
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(10)
-        hbox.Add(self.MaakTekst('GC waardes:', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        hbox.AddSpacer(1)
-        hbox.Add(self.TP(), 1, wx.ALL)
-        hbox.Add(self.MaakTekst('min', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        
-        hbox.AddSpacer(40)
-        
-        hbox.Add(self.MinGC, 1, wx.ALL )
-        
-        hbox.Add(self.TP(), 1, wx.ALL)
-        hbox.Add(self.MaakTekst('max', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        hbox.AddSpacer(40)
-        hbox.Add(self.MaxGC, 1, wx.ALL )
+        self.MaakStukje(hbox, 'min', ls[0])
+        self.MaakStukje(hbox, 'max', ls[1])
         hbox.AddSpacer(10)
         self.Vbox.Add(hbox, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL)
 
-    def MaakTM(self):
-        hbox = wx.BoxSizer(wx.HORIZONTAL)
-        hbox.AddSpacer(10)
-        hbox.Add(self.MaakTekst('TM waardes:', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
+    def MaakStukje(self, hbox, naam, el):
+        """
+        Input: 3
+            hbox: horizontal boxsizer.
+            naam: naam voor de tekst.
+            el: element, slider.
+        De functie zet een tussenpaneel in de box en daarna de tekst.
+        Vervolgens wordt er een spatie toegevoegd en daarna de slider.
+        """
         hbox.Add(self.TP(), 1, wx.ALL)
-        hbox.Add(self.MaakTekst('min', 'l'), 0, wx.ALL |
-                 wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
-        
-        hbox.AddSpacer(40)
-
-        hbox.Add(self.MinTM, 1, wx.ALL)
-        hbox.Add(self.TP(), 1, wx.ALL)
-        
-        hbox.Add(self.MaakTekst('max', 'l'), 0, wx.ALL |
+        hbox.Add(self.MaakTekst(naam, 'l'), 0, wx.ALL |
                  wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL | wx.SHAPED)
         hbox.AddSpacer(40)
-        hbox.Add(self.MaxTM, 1, wx.ALL)
-        hbox.AddSpacer(10)
-        self.Vbox.Add(hbox, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL)
+        hbox.Add(el, 1, wx.ALL)
 
     def TP(self):
+        """Functie geeft een SubPaneel(tussenpaneel) terug."""
         return SubPaneel(self)
 
     def MaakTekst(self, tekst, optie):
+        """
+        Input: 2
+            tekst: tekst voor de label.
+            optie: allign optie.
+        De funtctie kijkt welke optie meegegeven is en maakt
+        een statictext aan met de allignment optie. l voor LEFT.
+        Als laatste wordt de wx element terug gegeven.
+        """
         if optie == 'l':
             allign = wx.StaticText(self, id=-1, label=tekst,
-                                   style= wx.ALIGN_LEFT)
-        elif optie == 'r':
-            allign = wx.StaticText(self, id=-1, label=tekst,
-                                   style= wx.ALIGN_RIGHT)
+                                   style=wx.ALIGN_LEFT)
         return allign
-    
+
     def MaakPL(self):
         """
         Input: 0
@@ -124,13 +116,27 @@ class Opties(wx.Panel):
         """
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         text = wx.StaticText(self, id=-1, label='Primer Lengte:',
-                             style= wx.ALIGN_LEFT)
+                             style=wx.ALIGN_LEFT)
         self.PrimerLen = wx.Slider(self, value=20, minValue=10, maxValue=30,
                                    style=wx.SL_LABELS, name='Primer lengte:')
         hbox.AddSpacer(10)
-        hbox.Add(text, 0, wx.ALL  | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL |
+        hbox.Add(text, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL |
                  wx.SHAPED)
-        hbox.AddSpacer(5) 
-        hbox.Add(self.PrimerLen, 6, wx.ALL  )
         hbox.AddSpacer(5)
-        self.Vbox.Add(hbox, 0, wx.ALL |wx.EXPAND )
+        hbox.Add(self.PrimerLen, 6, wx.ALL)
+        hbox.AddSpacer(5)
+        self.Vbox.Add(hbox, 0, wx.ALL | wx.EXPAND)
+
+    def GetWaardes(self):
+        """
+        De functies pakt de waardes van alle sliders en stopt deze in
+        de volgende lijst [primerlengte, [gc], [tm]]. Deze wordt
+        terug gegven.
+        """
+        pl = self.PrimerLen.GetValue()
+        gn = self.MinGC.GetValue()
+        gx = self.MaxGC.GetValue()
+        tn = self.MinTM.GetValue()
+        tx = self.MaxTM.GetValue()
+        lijst = [pl, [gn, gx], [tn, tx]]
+        return lijst
