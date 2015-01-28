@@ -106,32 +106,32 @@ class Opties(wx.Panel):
                                    style=wx.ALIGN_LEFT)
         return allign
 
-    def CheckValues(self):
-        val = 20
-        maxv = 30
-        bracklen = 0
-        lislen = 0
-        for t in [['[', ']'], ['{', '}']]:
-            if t[0] in self.seq:
-                seq1= self.seq.split(t[0])[1]
-                seq2= seq1.split(t[1])[0]
-                if t[0] == '[':
-                    bracklen += len(seq2)
-                else:
-                    lislen += len(seq2)
-        if bracklen == 0 and lislen == 0:
-            return [val, maxv]
-        elif bracklen >= 30 and lislen >= 30:
-            return [val, maxv]
-        elif lislen == 0 and bracklen + lislen >= 30 or bracklen == 0 and bracklen + lislen >= 30:
-            return [val, maxv]
-        else:
-            if bracklen < lislen:
-                return [bracklen, bracklen]
-            elif lislen < bracklen:
-                return [lislen, lislen]
-            else:
-                return [bracklen, bracklen]
+##    def CheckValues(self):
+##        val = 20
+##        maxv = 30
+##        bracklen = 0
+##        lislen = 0
+##        for t in [['[', ']'], ['{', '}']]:
+##            if t[0] in self.seq:
+##                seq1= self.seq.split(t[0])[1]
+##                seq2= seq1.split(t[1])[0]
+##                if t[0] == '[':
+##                    bracklen += len(seq2)
+##                else:
+##                    lislen += len(seq2)
+##        if bracklen == 0 and lislen == 0:
+##            return [val, maxv]
+##        elif bracklen >= 30 and lislen >= 30:
+##            return [val, maxv]
+##        elif lislen == 0 and bracklen + lislen >= 30 or bracklen == 0 and bracklen + lislen >= 30:
+##            return [val, maxv]
+##        else:
+##            if bracklen < lislen:
+##                return [bracklen, bracklen]
+##            elif lislen < bracklen:
+##                return [lislen, lislen]
+##            else:
+##                return [bracklen, bracklen]
         
                 
         
@@ -149,9 +149,9 @@ class Opties(wx.Panel):
         hbox = wx.BoxSizer(wx.HORIZONTAL)
         text = wx.StaticText(self, id=-1, label='Primer Lengte:',
                              style=wx.ALIGN_LEFT)
-        v = self.CheckValues()
-        self.PrimerLen = wx.Slider(self, value=v[0], minValue=10,
-                                   maxValue=v[1],
+
+        self.PrimerLen = wx.Slider(self, value=20, minValue=10,
+                                   maxValue=30,
                                    style=wx.SL_LABELS, name='Primer lengte:')
         hbox.AddSpacer(10)
         hbox.Add(text, 0, wx.ALL | wx.ALIGN_RIGHT | wx.ALIGN_CENTER_VERTICAL |

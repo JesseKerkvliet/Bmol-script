@@ -67,6 +67,6 @@ class TekstPaneel(wx.Panel):
                     ", Tm-waarde en primerlengte aan te passen. Druk op ",
                     "volgende om door te gaan"]
         elif self.TekstTy == 2:
-            return ["Helaas zijn onvoldoende primers gegenereerd. Probeer",
+            return ["Helaas zijn onvoldoende primers gegenereerd.\nProbeer",
                     " het opnieuw met een andere sequentie, of pas de",
                     " instellingen aan."]
