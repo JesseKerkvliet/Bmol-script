@@ -104,38 +104,8 @@ class Opties(wx.Panel):
         if optie == 'l':
             allign = wx.StaticText(self, id=-1, label=tekst,
                                    style=wx.ALIGN_LEFT)
-        return allign
+        return allign               
 
-##    def CheckValues(self):
-##        val = 20
-##        maxv = 30
-##        bracklen = 0
-##        lislen = 0
-##        for t in [['[', ']'], ['{', '}']]:
-##            if t[0] in self.seq:
-##                seq1= self.seq.split(t[0])[1]
-##                seq2= seq1.split(t[1])[0]
-##                if t[0] == '[':
-##                    bracklen += len(seq2)
-##                else:
-##                    lislen += len(seq2)
-##        if bracklen == 0 and lislen == 0:
-##            return [val, maxv]
-##        elif bracklen >= 30 and lislen >= 30:
-##            return [val, maxv]
-##        elif lislen == 0 and bracklen + lislen >= 30 or bracklen == 0 and bracklen + lislen >= 30:
-##            return [val, maxv]
-##        else:
-##            if bracklen < lislen:
-##                return [bracklen, bracklen]
-##            elif lislen < bracklen:
-##                return [lislen, lislen]
-##            else:
-##                return [bracklen, bracklen]
-        
-                
-        
-        
     def MaakPL(self):
         """
         Input: 0
